@@ -6,15 +6,17 @@
 4. Saia da pasta com `cd ..`
 
 (Subir SNS)
+10. No arquivo `vars.tf` substitua '<EMAIL-AQUI>' pelo seu email
 5. Execute o comando `terraform init`
 6. Execute o comando `terraform apply -auto-approve`
 
-(Subir API Gateway e Lambda 1)
+(Subir API Gateway e Lambdas 1 e 2)
 7. Vá para a pasta serveless `cd ../serveless`
 8. Crie uma pasta chamada `layer` utilizando o comando no terminal `mkdir layer`
 9. Execute o comando `pip3 install -r requirements.txt -t layer` para instalar todas as dependencias listadas no arquivo `requirements.txt` dentro da pasta layer.
 10. No arquivo `serveless.yml` substitua '<ARN-SNS-AQUI>' pelo ARN do SNS criado pelo terraform
 10. Fazer deploy `sls deploy`
+11. Acesse seu email usado no SNS endpint e confirme a inscrição a partir do email recebido do sns [colocar imagem]
 
 
 
@@ -29,7 +31,7 @@
   curl --location --request POST '<URL-SEM-PATH>/book/create' \
 --header 'Content-Type: application/json' \
 --data-raw '{
- "book_name":"harry potter",
+ "book_name": "harry potter",
  "book_id": 34577,
  "book_preco": 45.87
 }
@@ -40,9 +42,8 @@
   curl --location --request POST '<URL-SEM-PATH>/sell/book' \
 --header 'Content-Type: application/json' \
 --data-raw '{
- "book_name":"harry potter",
- "book_id": 34577,
- "book_preco": 45.87
+ "book_id": 2346,
+ "customer_id": 12456
 }
 '
 ```
