@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "type": "object",
+    "title": "Schema request sell-book path",
+    "required": [
+        "book_id",
+        "customer_id"
+    ],
+    "properties": {
+        "book_id": {
+            "type": "number",
+            "title": "The book_id schema"
+        },
+        "customer_id": {
+            "type": "number",
+            "title": "The customer_id schema"
+        }
+    },
+    "additionalProperties": false
+}

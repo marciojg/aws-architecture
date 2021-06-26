@@ -16,8 +16,8 @@ provider:
 
 package:
   exclude:
-    - "node_modules/*"
-    - "./node_modules/**"
+    - node_modules/*
+    - ./node_modules/**
     - layer/**
     - schemas/*
     
@@ -26,9 +26,11 @@ layers:
     path: layer
     description: "learning layers"
 
+
 functions:
   book-create:
     handler: book_create.handler
+    name: lambda1-book-create
     
     events:
       - http:
@@ -38,6 +40,26 @@ functions:
           request:
             schema:
               application/json: ${file(schemas/book-create-schema-request.json)}
+              
+    layers:
+      - {Ref: LayerDependenciesLambdaLayer}
+
+    environment:
+      # snsArn: '<ARN-SNS-AQUI>'
+      snsArn: 'arn:aws:sns:us-east-1:644689573437:sns-1-topic'
+              
+  sell-book:
+    handler: sell_book.handler
+    name: lambda2-sell-book
+    
+    events:
+      - http:
+          path: /sell/book
+          method: post
+          cors: true
+          request:
+            schema:
+              application/json: ${file(schemas/sell-book-schema-request.json)}
               
     layers:
       - {Ref: LayerDependenciesLambdaLayer}
