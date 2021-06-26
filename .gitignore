@@ -1,1 +1,8 @@
-.serverless/
+serveless/.serverless
+serveless/layer/*
+
+terraform/.terraform/*
+#terraform/terraform.tfstate
+
+terraform/S3/.terraform/*
+terraform/S3/terraform.tfstate

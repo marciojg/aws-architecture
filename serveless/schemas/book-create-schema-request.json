@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "type": "object",
+    "title": "Schema request book-create path",
+    "required": [
+        "book_name",
+        "book_id",
+        "book_preco"
+    ],
+    "properties": {
+        "book_name": {
+            "type": "string",
+            "title": "The book_name schema"
+        },
+        "book_id": {
+            "type": "number",
+            "title": "The book_id schema"
+        },
+        "book_preco": {
+            "type": "number",
+            "title": "The book_preco schema"
+        }
+    },
+    "additionalProperties": false
+}
