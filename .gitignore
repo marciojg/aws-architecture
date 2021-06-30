@@ -2,6 +2,7 @@ serveless/.serverless
 serveless/layer/*
 
 terraform/.terraform/*
+.terraform.lock.hcl
 #terraform/terraform.tfstate
 
 terraform/S3/.terraform/*

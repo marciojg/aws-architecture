@@ -1,4 +1,30 @@
+Criar ambiente
+
+executar todos os passos aqui https://github.com/vamperst/Hackaton-exercises-terraform/tree/master/Setup%20e%20Configura%C3%A7%C3%A3o
+unica exceção é o passo 14 que instala terraform
+
+Instalar terraform 
+
+sh installTerraform.sh
+
+terraform init
+
+se tiver o errro: 
+```
+╷
+│ Error: Invalid legacy provider address
+│ 
+│ This configuration or its associated state refers to the unqualified provider "aws".
+│ 
+│ You must complete the Terraform 0.13 upgrade process before upgrading to later versions.
+╵
+```
+
+solucao: terraform state replace-provider -- -/aws hashicorp/aws
+
+
 (Subir base S3)
+
 
 1. Entre na pasta 'S3' com o comando `cd terraform/S3`
 2. Execute o comando `terraform init`
@@ -18,7 +44,8 @@
 10. Fazer deploy `sls deploy`
 11. Acesse seu email usado no SNS endpint e confirme a inscrição a partir do email recebido do sns [colocar imagem]
 
-
+data "aws_caller_identity" "current" {}
+["arn:*:*:*:${data.aws_caller_identity.current.account_id}:*"]
 
 ----------------------------------------
 

@@ -1,16 +1,13 @@
-# data "aws_ami" "example" {
+data "aws_caller_identity" "current" {}
 
-#   most_recent      = true
-#   owners           = ["099720109477"]
+output "account_id" {
+  value = data.aws_caller_identity.current.account_id
+}
 
-#   filter {
-#     name   = "name"
-#     values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-*"]
-#   }
+output "caller_arn" {
+  value = data.aws_caller_identity.current.arn
+}
 
-#   filter {
-#     name   = "virtualization-type"
-#     values = ["hvm"]
-#   }
-  
-# }
+output "caller_user" {
+  value = data.aws_caller_identity.current.user_id
+}
