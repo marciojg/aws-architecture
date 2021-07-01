@@ -26,7 +26,7 @@ resource "aws_sns_topic_subscription" "sqs_1_sqs_target" {
   topic_arn = aws_sns_topic.sns_1.arn
   protocol  = "sqs"
   endpoint  = aws_sqs_queue.sqs_1.arn
-  raw_message_delivery = true
+  raw_message_delivery = false
 }
 
 resource "aws_sqs_queue_policy" "sqs_1_policy" {

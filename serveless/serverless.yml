@@ -13,6 +13,12 @@ provider:
       Resource:
         - 'arn:aws:sns:us-east-1:644689573437:sns-1-topic'
         # -  '<ARN-SNS-AQUI>'
+    - Effect: 'Allow'
+      Action:
+        - 'sqs:*'
+      Resource:
+        -  'arn:aws:sqs:us-east-1:644689573437:sqs-1-queue'
+        # -  '<ARN-SQS-AQUI>'
 
 package:
   exclude:
@@ -68,3 +74,19 @@ functions:
       # snsArn: '<ARN-SNS-AQUI>'
       snsArn: 'arn:aws:sns:us-east-1:644689573437:sns-1-topic'
       
+  sqs-to-s3:
+    handler: sqs_to_s3.handler
+    name: lambda3-sqs-to-s3
+    
+    events:
+      - sqs:
+          # arn: '<ARN-SQS-AQUI>'
+          arn: 'arn:aws:sqs:us-east-1:644689573437:sqs-1-queue'
+          batchSize: 1
+          
+    layers:
+      - {Ref: LayerDependenciesLambdaLayer}
+
+    # environment:
+      # sqsArn: 'arn:aws:sns:us-east-1:644689573437:sqs-1-queue'
+      # sqsArn: '<ARN-SQS-AQUI>'
