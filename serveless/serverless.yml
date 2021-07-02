@@ -6,6 +6,7 @@ custom:
   # arnSqs1Queue: '<ARN-SQS-AQUI>'
   arnSns1Topic: 'arn:aws:sns:us-east-1:644689573437:sns-1-topic'
   arnSqs1Queue: 'arn:aws:sqs:us-east-1:644689573437:sqs-1-queue'
+  bucket: 's3-bucket-final'
 
 provider:
   name: aws
@@ -25,6 +26,11 @@ provider:
         - 'sqs:*'
       Resource:
         -  ${self:custom.arnSqs1Queue}
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:PutObjectAcl
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
 
 package:
   exclude:
@@ -89,3 +95,6 @@ functions:
           
     layers:
       - {Ref: LayerDependenciesLambdaLayer}
+      
+    environment:
+      BUCKET: ${self:custom.bucket}

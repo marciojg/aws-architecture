@@ -53,3 +53,18 @@ resource "aws_sqs_queue_policy" "sqs_1_policy" {
 }
 POLICY
 }
+
+resource "aws_s3_bucket" "s3_bucket_final_log" {
+  bucket = "s3-bucket-final-log"
+  acl    = "log-delivery-write"
+}
+
+resource "aws_s3_bucket" "s3_bucket_final" {
+  bucket = "s3-bucket-final"
+  acl    = "private"
+
+  logging {
+    target_bucket = aws_s3_bucket.s3_bucket_final_log.id
+    target_prefix = "log/"
+  }
+}

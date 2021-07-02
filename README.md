@@ -44,8 +44,6 @@ solucao: terraform state replace-provider -- -/aws hashicorp/aws
 10. Fazer deploy `sls deploy`
 11. Acesse seu email usado no SNS endpint e confirme a inscrição a partir do email recebido do sns [colocar imagem]
 
-data "aws_caller_identity" "current" {}
-["arn:*:*:*:${data.aws_caller_identity.current.account_id}:*"]
 
 ----------------------------------------
 
