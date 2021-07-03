@@ -3,7 +3,6 @@ variable "AWS_REGION" {
 }
 
 variable "EMAIL_ENDPOINT" {
-  # default = "<EMAIL-AQUI>"
-  default = "marciodejesusrj@gmail.com"
+  default = "<EMAIL-AQUI>"
 }
 
