@@ -1,139 +1,172 @@
-Criar ambiente
+# AWS ARCHITECTURE
 
-executar todos os passos aqui https://github.com/vamperst/Hackaton-exercises-terraform/tree/master/Setup%20e%20Configura%C3%A7%C3%A3o
-unica exceção é o passo 14 que instala terraform
+Projeto feito com o objetivo de criar uma infra como código na AWS Cloud utilizando [Terraform](https://www.terraform.io) e [Serveless Framework](https://www.serverless.com).
 
-Instalar terraform 
+---
+---
+# Motivador
 
-sh installTerraform.sh
+- [PROBLEMA PROPOSTO](./DESAFIO_PROPOSTO.pdf)
 
-terraform init
+---
+---
+# Arquitetura do projeto
 
-se tiver o errro: 
-```
-╷
-│ Error: Invalid legacy provider address
-│ 
-│ This configuration or its associated state refers to the unqualified provider "aws".
-│ 
-│ You must complete the Terraform 0.13 upgrade process before upgrading to later versions.
-╵
-```
+![Arquitetura do projeto](./imgs/aws-cloud-architecture.PNG)
 
-solucao: terraform state replace-provider -- -/aws hashicorp/aws
+---
+---
+
+# Passos para execução do projeto
+
+## Criar ambiente
+
+Siga as instruções [deste repositório](https://github.com/vamperst/Hackaton-exercises-terraform/tree/master/Setup%20e%20Configura%C3%A7%C3%A3o) para montar seu ambiente no **Cloud9** juntamente com a instalação do **Terraform** e **Serveless Framework**.
+
+## Subir projeto
+
+Assim que tiver seu ambiente montado siga as instruções abaixo:
+
+### Clone do repositório
+
+1. Volte para a pasta raiz do cloud9 `cd ~/environment`
+2. Clone este projeto `git clone https://github.com/marciojg/aws-architecture.git`
+3. Entre na psta do projeto `cd aws-architecture`
 
 
-(Subir base S3)
+### Subir Bucket S3 para guardar o estado do terraform
 
-
-1. Entre na pasta 'S3' com o comando `cd terraform/S3`
-2. Execute o comando `terraform init`
-3. Execute o comando `terraform apply -auto-approve`
-4. Saia da pasta com `cd ..`
-
-(Subir SNS)
-10. No arquivo `vars.tf` substitua '<EMAIL-AQUI>' pelo seu email
+4. Entre na pasta 'S3' com o comando `cd terraform/S3`
 5. Execute o comando `terraform init`
 6. Execute o comando `terraform apply -auto-approve`
+7. Saia da pasta com `cd ..`
 
-(Subir API Gateway e Lambdas 1 e 2)
-7. Vá para a pasta serveless `cd ../serveless`
-8. Crie uma pasta chamada `layer` utilizando o comando no terminal `mkdir layer`
-9. Execute o comando `pip3 install -r requirements.txt -t layer` para instalar todas as dependencias listadas no arquivo `requirements.txt` dentro da pasta layer.
-10. No arquivo `serveless.yml` substitua '<ARN-SNS-AQUI>' pelo ARN do SNS criado pelo terraform
-10. Fazer deploy `sls deploy`
-11. Acesse seu email usado no SNS endpint e confirme a inscrição a partir do email recebido do sns [colocar imagem]
+![bucket-s3-terraform-state](./imgs/bucket-s3-terraform-state.PNG)
 
+### Subir SNS, SQS, Bucket/S3 suas subscrições e políticas
 
-----------------------------------------
+8. No arquivo `vars.tf` substitua `<EMAIL-AQUI>` pelo seu email
+9. Execute o comando `terraform init`
+10. Execute o comando `terraform apply -auto-approve`
 
-1. Criar serveless Execute um `sls deploy`
-2. Copia os endereços que aparecerem, e substitua nas urls abaixo, e execute
+![sns-topic](./imgs/sns-topic.PNG)
+![sqs-queue-e-dlq-queue](./imgs/sqs-queue-e-dlq-queue.PNG)
+![bucket-s3-final-e-bucket-s3-log](./imgs/bucket-s3-final-e-bucket-s3-log.PNG)
+
+### Subir Lambdas e API Gateway e suas conexões
+
+11. Vá para a pasta serveless `cd ../serveless`
+12. Crie uma pasta chamada `layer` utilizando o comando no terminal `mkdir layer`
+13. Execute os comandos abaixo para instalar todas as dependencias listadas no arquivo `requirements.txt` dentro da pasta layer.
 
 ```bash
-  # /book/create
-  
-  curl --location --request POST '<URL-SEM-PATH>/book/create' \
---header 'Content-Type: application/json' \
---data-raw '{
- "book_name": "harry potter",
+  python3 -m venv ~/venv
+  source ~/venv/bin/activate
+
+  pip3 install -r requirements.txt -t layer
+
+  deactivate
+```
+
+14. No arquivo `serveless.yml` substitua `<ARN-SNS-AQUI>` pelo ARN do SNS criado pelo terraform com o nome **sns-1-topic**.
+15. No arquivo `serveless.yml` substitua `<ARN-SQS-AQUI>` pelo ARN do SQS criado pelo terraform com o nome **sqs-1-queue**.
+16. Fazer deploy `sls deploy`
+17. Acesse seu email usado no SNS endpint e confirme a inscrição a partir do email recebido do SNS, conforme imagem abaixo
+
+![sns-email-subscription](./imgs/sns-email-subscription.PNG)
+![cloud-formation](./imgs/cloud-formation.PNG)
+![bucket-s3-serveless](./imgs/bucket-s3-serveless.PNG)
+![lambdas](./imgs/lambdas.PNG)
+![api-gateway](./imgs/api-gateway.PNG)
+
+---
+---
+
+## Testar projeto
+
+Dados válidos para request
+
+```json
+// /book/create
+
+{
+ "book_name":"harry potter",
  "book_id": 34577,
  "book_preco": 45.87
 }
-'
+```
 
-  # /sell/book
-  
-  curl --location --request POST '<URL-SEM-PATH>/sell/book' \
---header 'Content-Type: application/json' \
---data-raw '{
- "book_id": 2346,
+```json
+//  /sell/book
+
+{
+ "book_id":2346,
  "customer_id": 12456
 }
-'
 ```
 
-3.
+Os testes podem ser feitos diretamente pelo API Gateway que possui uma interface de testes ou usando curl diretamente do console do Cloud9.
 
-usar os iniciais aqui pra criar o s3 para manter o state do terraform
-1. Execute o comando `cd ~/environment/Hackaton-exercises-terraform/demos/State/` para entrar na pasta do exercicío.'
-2. Entre na pasta 'S3' com o comando `cd S3`
-3. Execute o comando `terraform init`
-4. Utilizando o IDE altere o aquivo 's3.tf' que esta em '/Hackaton-exercises-terraform/demos/State/S3'. Coloque sua turma e seu rm noo locais indicados. Sem espaços e sem letras maiúsculas. Isso é necessário pois os nomes de buckets são unicos em toda a AWS não só em sua conta. 
-5. Execute o comando `terraform apply -auto-approve`
-6. Você acabou de criar o bucket que lhe servirá de estado remoto
-7. Saia da pasta com `cd ..`
-8. Entre na pasta 'test' com o comando `cd test`
-9.  Utilizendo o IDE altere o arquivo state.tf que esta no diretório '/Hackaton-exercises-terraform/demos/State/test'. No campo bucket coloque o mesmo nome que utilizou para criar o bucket acima.
-10. Utilize o comando `terraform init` para sincronizar com o estado remoto
-11. Execute o comando `terraform apply -auto-approve`
-12. Se for agora no bucket do S3 que criou para o exercicio você poderá ver que foi criado um arquivo com o nome teste. Nele constam todas as indormações de tudo que o terraform executou dentro da pasta test. Verifique baixando o arquivo e lendo.
-    ![images/states3.png](images/states3.png)
-13. Execute o comando `rm -rf .terraform` para remover todos os arquivos de estado local do terraform
-14. Execute novamente `terraform init`, dessa vez além de baixar os plugins e providers também baixou o ultimo estado da sua infraestrutura.
-15. Execute o comando `terraform apply -auto-approve`. Note que nada foi alterado ou adiiconado já que sua maquina ainda esta disponivel e o terraform descobriu isso via estado remoto.
-    ![apply](images/apply0.png)
-16. Execute o comando `terraform destroy -auto-approve`
+Caso decida fazer os testes usando o curl o endereço das APIs podem ser capturados logo após executar o comando `sls deploy`.
 
+![resultado-serveless](./imgs/resultado-serveless.PNG)
 
-```sh
-# Remove possível estado remoto ou atual, se houver
-rm -rf .terraform
+### Request válida
 
-# inicia Terraform para carregar o estado remoto s3
-terraform init
+Quando enviamos uma request válida, a api retorna 200 e um arquivo será criado no bucket. Ex:
 
-# Cria workspaces
-terraform workspace new dev
-terraform workspace new homol
-terraform workspace new prod
+![teste-api-gateway](./imgs/teste-api-gateway.PNG)
 
-# Lista as workspaces
-terraform workspace list
+![teste-api-gateway-email](./imgs/teste-api-gateway-email.PNG)
 
-# Seleciona e sobe as 2 instâncias de ec2
-terraform workspace select dev
-terraform apply -auto-approve
+![teste-api-gateway-book-create](./imgs/teste-api-gateway-book-create.PNG)
 
-# Seleciona e sobe as 2 instâncias de ec2
-terraform workspace select homol
-terraform apply -auto-approve
+![teste-api-gateway-sell-book](./imgs/teste-api-gateway-sell-book.PNG)
 
-# Seleciona e sobe as 2 instâncias de ec2
-terraform workspace select prod
-terraform apply -auto-approve
+![objetos-criados-no-bucket-s3](./imgs/objetos-criados-no-bucket-s3.PNG)
 
-# Seleciona e derruba as 2 instâncias de ec2
-terraform workspace select dev
-terraform destroy -auto-approve
+---
 
-# Seleciona e derruba as 2 instâncias de ec2
-terraform workspace select homol
-terraform destroy -auto-approve
+### Request Inválida
 
-# Seleciona e derruba as 2 instâncias de ec2
-terraform workspace select prod
-terraform destroy -auto-approve
+Quando a request é inválida um erro 400 é retornado e no log é exibido o atributo que está errado
 
+![teste-api-gateway-book-create-erro](./imgs/teste-api-gateway-book-create-erro.PNG)
+![teste-api-gateway-book-create-erro-log](./imgs/teste-api-gateway-book-create-erro-log.PNG)
+
+![teste-api-gateway-sell-book-erro](./imgs/teste-api-gateway-sell-book-erro.PNG)
+![teste-api-gateway-sell-book-erro-log](./imgs/teste-api-gateway-sell-book-erro-log.PNG)
+
+---
+---
+## Destruir projeto
+
+18. Serveless down
+
+```bash
+cd ~/environment/aws-architecture/serveless/
+sls remove --force
 ```
 
+19. Terraform down
+
+```bash
+cd ~/environment/aws-architecture/terraform/
+terraform destroy --force
+```
+---
+---
+
+## Links úteis
+
+- https://github.com/serverless/examples
+- https://github.com/vamperst/Hackaton-exercises-terraform
+- https://github.com/vamperst/Hackaton-exercises-serverless
+- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue
+- https://registry.terraform.io/modules/damacus/sqs-with-dlq/aws/latest
+- https://www.serverless.com/framework/docs/providers/aws/events/apigateway/
+- https://www.serverless.com/blog/aws-lambda-sqs-serverless-integration
+- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription
+- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic
+- https://christiangiacomi.com/posts/terraform-sns-sqs-lambda/
+- https://github.com/vamperst/desbravando-erros-e-falhas-em-territorio-serverless-demo
