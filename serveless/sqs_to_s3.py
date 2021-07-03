@@ -7,7 +7,7 @@ import uuid
 s3 = boto3.client('s3')
 
 def handler(event, context):
-    print('recebido handler como um objeto')
+    print('recebido handler como um objeto', event)
     
     # Cria UUID
     id = uuid.uuid1()
@@ -15,21 +15,27 @@ def handler(event, context):
     # Captura nome do Bucket
     bucketName=os.environ["BUCKET"]
     
-    # Serialize the object
-    serializedEvent = json.dumps(event)
-
-    # Name of file
-    fileName = '-'.join(event.keys()) + '-' + str(id) + '.txt'
+    # String object capturated of event
+    eventBody = event.get('Records')[0].get('body')
     
-    print('serializedEvent', serializedEvent)
+    # Body as object
+    eventBodyObj = json.loads(eventBody) 
+    
+    # Name of file
+    fileName = '-'.join(eventBodyObj.keys()) + '-' + str(id) + '.txt'
+    
+    print('eventBody', eventBody)
     print('id', id)    
     print('fileName', fileName)
     
     # Write to S3
-    s3.put_object(Bucket=bucketName, Key=fileName, Body=serializedEvent)
+    s3.put_object(Bucket=bucketName, Key=fileName, Body=eventBody)
     
-    body = fileName + ' ' + 'criado' + 'com body' + ' ' + serializedEvent
-    print(body)
+    # Print log
+    log = ['objeto com nome', fileName, 'criado com body', eventBody]
+    body = ' '.join(log)
+    
+    print('corpo do arquivo criado', body)
     
     response = {
         "statusCode": 200,
