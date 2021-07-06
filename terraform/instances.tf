@@ -62,13 +62,13 @@ POLICY
 
 # Log Bucket S3
 resource "aws_s3_bucket" "s3_bucket_final_log" {
-  bucket = "s3-bucket-final-log"
+  bucket = "s3-bucket-final-log-${data.aws_caller_identity.current.account_id}"
   acl    = "log-delivery-write"
 }
 
 # Bucket S3
 resource "aws_s3_bucket" "s3_bucket_final" {
-  bucket = "s3-bucket-final"
+  bucket = "s3-bucket-final-${data.aws_caller_identity.current.account_id}"
   acl    = "private"
 
   logging {

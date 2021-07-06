@@ -45,9 +45,13 @@ Assim que tiver seu ambiente montado siga as instruções abaixo:
 
 ### Subir SNS, SQS, Bucket/S3 suas subscrições e políticas
 
-8. No arquivo `vars.tf` substitua `<EMAIL-AQUI>` pelo seu email
-9. Execute o comando `terraform init`
-10. Execute o comando `terraform apply -auto-approve`
+8. Utilizando o IDE abra o arquivo `terraform/vars.tf` e substitua `<EMAIL-AQUI>` pelo seu email
+9. Utilizando o IDE abra o arquivo `terraform/state.tf` e substitua `<ACCOUNT-ID-AQUI>` pelo ID da sua conta AWS que pode ser encontrado no resultado do comando da linha 6 que você executou anteriormente. Ex:
+
+![bucket-s3-state-account-id](./imgs/bucket-s3-state-account-id.PNG)
+
+10. Execute o comando `terraform init`
+11. Execute o comando `terraform apply -auto-approve`
 
 ![sns-topic](./imgs/sns-topic.PNG)
 ![sqs-queue-e-dlq-queue](./imgs/sqs-queue-e-dlq-queue.PNG)
@@ -55,9 +59,9 @@ Assim que tiver seu ambiente montado siga as instruções abaixo:
 
 ### Subir Lambdas e API Gateway e suas conexões
 
-11. Vá para a pasta serveless `cd ../serveless`
-12. Crie uma pasta chamada `layer` utilizando o comando no terminal `mkdir layer`
-13. Execute os comandos abaixo para instalar todas as dependencias listadas no arquivo `requirements.txt` dentro da pasta layer.
+12. Vá para a pasta serveless `cd ../serveless`
+13. Crie uma pasta chamada `layer` utilizando o comando no terminal `mkdir layer`
+14. Execute os comandos abaixo para instalar todas as dependencias listadas no arquivo `requirements.txt` dentro da pasta layer.
 
 ```bash
   python3 -m venv ~/venv
@@ -68,10 +72,10 @@ Assim que tiver seu ambiente montado siga as instruções abaixo:
   deactivate
 ```
 
-14. No arquivo `serveless.yml` substitua `<ARN-SNS-AQUI>` pelo ARN do SNS criado pelo terraform com o nome **sns-1-topic**.
-15. No arquivo `serveless.yml` substitua `<ARN-SQS-AQUI>` pelo ARN do SQS criado pelo terraform com o nome **sqs-1-queue**.
-16. Fazer deploy `sls deploy`
-17. Acesse seu email usado no SNS endpint e confirme a inscrição a partir do email recebido do SNS, conforme imagem abaixo
+15. No arquivo `serveless.yml` substitua `<ARN-SNS-AQUI>` pelo ARN do SNS criado pelo terraform com o nome **sns-1-topic**.
+16. No arquivo `serveless.yml` substitua `<ARN-SQS-AQUI>` pelo ARN do SQS criado pelo terraform com o nome **sqs-1-queue**.
+17. Fazer deploy `sls deploy`
+18. Acesse seu email usado no SNS endpint e confirme a inscrição a partir do email recebido do SNS, conforme imagem abaixo
 
 ![sns-email-subscription](./imgs/sns-email-subscription.PNG)
 ![cloud-formation](./imgs/cloud-formation.PNG)
@@ -141,14 +145,14 @@ Quando a request é inválida um erro 400 é retornado e no log é exibido o atr
 ---
 ## Destruir projeto
 
-18. Serveless down
+19. Serveless down
 
 ```bash
 cd ~/environment/aws-architecture/serveless/
 sls remove --force
 ```
 
-19. Terraform down
+20. Terraform down
 
 ```bash
 cd ~/environment/aws-architecture/terraform/
