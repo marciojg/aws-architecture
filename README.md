@@ -163,6 +163,13 @@ sls remove --force
 cd ~/environment/aws-architecture/terraform/
 terraform destroy --force
 ```
+
+20. Terraform state down
+
+```bash
+cd ~/environment/aws-architecture/terraform/S3
+terraform destroy --force
+```
 ---
 ---
 
