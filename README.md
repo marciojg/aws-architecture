@@ -45,8 +45,11 @@ Assim que tiver seu ambiente montado siga as instruções abaixo:
 
 ### Subir SNS, SQS, Bucket/S3 suas subscrições e políticas
 
-8. Utilizando o IDE abra o arquivo `aws-architecture/terraform/vars.tf` e substitua `<SEU-EMAIL-AQUI>` pelo seu email
-9. Utilizando o IDE abra o arquivo `aws-architecture/terraform/state.tf` e substitua `<ACCOUNT-ID-AQUI>` pelo ID da sua conta AWS que pode ser encontrado no resultado do comando da linha 6 que você executou anteriormente. Ex:
+8. Execute o comando a seguir `bash ../replace-vars.bash vars.tf` e informe `<SEU-EMAIL-AQUI>` no **Valor a ser procurado** e no **Novo valor** deve ser seu email. Ex:
+
+![bash-replace-var-example](./imgs/bash-replace-var-example.PNG)
+
+9. Execute o comando a seguir `bash ../replace-vars.bash state.tf` e informe `<ACCOUNT-ID-AQUI>` no **Valor a ser procurado** e no **Novo valor** deve ser o ID da sua conta AWS que pode ser encontrado no resultado do comando da linha 6 que você executou anteriormente. Ex:
 
 ![bucket-s3-state-account-id](./imgs/bucket-s3-state-account-id.PNG)
 
@@ -72,15 +75,13 @@ Assim que tiver seu ambiente montado siga as instruções abaixo:
   deactivate
 ```
 
-15. No arquivo `aws-architecture/serveless/serveless.yml` substitua `<ARN-SNS-AQUI>` pelo ARN do SNS criado pelo terraform com o nome **sns-1-topic**. Ex:
-![arn-sns-example](./imgs/arn-sns-example.PNG)
+15. Execute o comando a seguir `bash ../replace-vars.bash serverless.yml` e informe `<ACCOUNT-ID-AQUI>` no **Valor a ser procurado** e no **Novo valor** deve ser o ID da sua conta AWS que pode ser encontrado no resultado do comando da linha 6 que você executou anteriormente. Ex:
 
-16. No arquivo `aws-architecture/serveless/serveless.yml` substitua `<ARN-SQS-AQUI>` pelo ARN do SQS criado pelo terraform com o nome **sqs-1-queue**. Ex:
-![arn-sqs-example](./imgs/arn-sqs-example.PNG)
+![bucket-s3-state-account-id](./imgs/bucket-s3-state-account-id.PNG)
 
 
-17. Fazer deploy `sls deploy`
-18. Acesse seu email usado no SNS endpint e confirme a inscrição a partir do email recebido do SNS, conforme imagem abaixo
+16. Fazer deploy `sls deploy`
+17. Acesse seu email usado no SNS endpint e confirme a inscrição a partir do email recebido do SNS, conforme imagem abaixo
 
 ![sns-email-subscription](./imgs/sns-email-subscription.PNG)
 ![cloud-formation](./imgs/cloud-formation.PNG)
@@ -95,9 +96,9 @@ Assim que tiver seu ambiente montado siga as instruções abaixo:
 
 Dados válidos para request
 
-```json
-// /book/create
+/book/create
 
+```json
 {
  "book_name":"harry potter",
  "book_id": 34577,
@@ -105,9 +106,8 @@ Dados válidos para request
 }
 ```
 
+/sell/book
 ```json
-//  /sell/book
-
 {
  "book_id":2346,
  "customer_id": 12456
@@ -150,14 +150,14 @@ Quando a request é inválida um erro 400 é retornado e no log é exibido o atr
 ---
 ## Destruir projeto
 
-19. Serveless down
+18. Serveless down
 
 ```bash
 cd ~/environment/aws-architecture/serveless/
 sls remove --force
 ```
 
-20. Terraform down
+19. Terraform down
 
 ```bash
 cd ~/environment/aws-architecture/terraform/

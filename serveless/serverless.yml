@@ -2,9 +2,9 @@
 service: api-gateway-and-lambdas
 
 custom:
-  arnSns1Topic: '<ARN-SNS-AQUI>'
-  arnSqs1Queue: '<ARN-SQS-AQUI>'
-  bucket: 's3-bucket-final'
+  arnSns1Topic: 'arn:aws:sns:us-east-1:<ACCOUNT-ID-AQUI>:sns-1-topic'
+  arnSqs1Queue: 'arn:aws:sqs:us-east-1:<ACCOUNT-ID-AQUI>:sqs-1-queue'
+  bucket: 's3-bucket-final-<ACCOUNT-ID-AQUI>'
 
 provider:
   name: aws
