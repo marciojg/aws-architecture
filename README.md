@@ -45,8 +45,8 @@ Assim que tiver seu ambiente montado siga as instruções abaixo:
 
 ### Subir SNS, SQS, Bucket/S3 suas subscrições e políticas
 
-8. Utilizando o IDE abra o arquivo `terraform/vars.tf` e substitua `<EMAIL-AQUI>` pelo seu email
-9. Utilizando o IDE abra o arquivo `terraform/state.tf` e substitua `<ACCOUNT-ID-AQUI>` pelo ID da sua conta AWS que pode ser encontrado no resultado do comando da linha 6 que você executou anteriormente. Ex:
+8. Utilizando o IDE abra o arquivo `aws-architecture/terraform/vars.tf` e substitua `<SEU-EMAIL-AQUI>` pelo seu email
+9. Utilizando o IDE abra o arquivo `aws-architecture/terraform/state.tf` e substitua `<ACCOUNT-ID-AQUI>` pelo ID da sua conta AWS que pode ser encontrado no resultado do comando da linha 6 que você executou anteriormente. Ex:
 
 ![bucket-s3-state-account-id](./imgs/bucket-s3-state-account-id.PNG)
 
@@ -72,8 +72,13 @@ Assim que tiver seu ambiente montado siga as instruções abaixo:
   deactivate
 ```
 
-15. No arquivo `serveless.yml` substitua `<ARN-SNS-AQUI>` pelo ARN do SNS criado pelo terraform com o nome **sns-1-topic**.
-16. No arquivo `serveless.yml` substitua `<ARN-SQS-AQUI>` pelo ARN do SQS criado pelo terraform com o nome **sqs-1-queue**.
+15. No arquivo `aws-architecture/serveless/serveless.yml` substitua `<ARN-SNS-AQUI>` pelo ARN do SNS criado pelo terraform com o nome **sns-1-topic**. Ex:
+![arn-sns-example](./imgs/arn-sns-example.PNG)
+
+16. No arquivo `aws-architecture/serveless/serveless.yml` substitua `<ARN-SQS-AQUI>` pelo ARN do SQS criado pelo terraform com o nome **sqs-1-queue**. Ex:
+![arn-sqs-example](./imgs/arn-sqs-example.PNG)
+
+
 17. Fazer deploy `sls deploy`
 18. Acesse seu email usado no SNS endpint e confirme a inscrição a partir do email recebido do SNS, conforme imagem abaixo
 
