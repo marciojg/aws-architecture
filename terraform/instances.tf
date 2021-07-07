@@ -64,12 +64,16 @@ POLICY
 resource "aws_s3_bucket" "s3_bucket_final_log" {
   bucket = "s3-bucket-final-log-${data.aws_caller_identity.current.account_id}"
   acl    = "log-delivery-write"
+
+  force_destroy = true
 }
 
 # Bucket S3
 resource "aws_s3_bucket" "s3_bucket_final" {
   bucket = "s3-bucket-final-${data.aws_caller_identity.current.account_id}"
   acl    = "private"
+
+  force_destroy = true
 
   logging {
     target_bucket = aws_s3_bucket.s3_bucket_final_log.id
